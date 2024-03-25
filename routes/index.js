@@ -11,8 +11,6 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/test/:uid',
-  authorization,
-  checkUserType(['sys', 'oper']),
   param('uid').isNumeric(),
   query('ttt').isNumeric(),
   query('aaa').exists(),

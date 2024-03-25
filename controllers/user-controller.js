@@ -2,7 +2,6 @@ const { StatusCodes } = require('http-status-codes');
 const jwt = require('../middlewares/jwt');
 const response = require('../modules/response');
 
-
 const login = async (req, res, next) => {
   const id = req.body.id;
   const type = req.body.type;
@@ -14,7 +13,7 @@ const login = async (req, res, next) => {
   return res.status(StatusCodes.OK).json(response.Success(token.token));
 }
 
-const me = async (req, res, next) => {
+const me = (req, res, next) => {
   return res.status(StatusCodes.OK).json(response.Success(req.jwt));
 }
 
