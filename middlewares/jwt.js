@@ -5,34 +5,34 @@ const TOKEN_INVALID = -2
 
 const JwtSecretKey = process.env.JWT_SECRET_KEY;
 const JwtOption = {
-  option: {
-    algorithm: process.env.JWT_OPTION_ALGORITHM,
-    expiresIn: process.env.JWT_OPTION_EXPIRESIN,
-    issuer: process.env.JWT_OPTION_ISSURE,
-  }
+  algorithm: process.env.JWT_OPTION_ALGORITHM,
+  expiresIn: process.env.JWT_OPTION_EXPIRESIN,
+  issuer: process.env.JWT_OPTION_ISSURE,
 }
 
 // type은 사용자 유형 sys | oper | user
 module.exports = {
   TOKEN_EXPIRED,
   TOKEN_INVALID,
-  sign: async ({ id, isAdmin, type }) => {
-    const payload = {
-      id,
-      isAdmin,
-      type,
-    };
-    const result = {
-      token: jwt.sign(payload, JwtSecretKey, JwtOption),
+  sign: async ({ id, type }) => {
+    const token = await jwt.sign(
+      {
+        id,
+        type,
+      },
+      JwtSecretKey,
+      JwtOption,
+    );
+    return {
+      token,
       // refreshToken: randToken.uid(256)
     };
-    return result;
   },
   verify: async ({ token }) => {
     let decoded;
     try {
       // verify를 통해 값 decode!
-      decoded = jwt.verify(token, secretKey);
+      decoded = jwt.verify(token, JwtSecretKey);
     } catch (err) {
       if (err.message === 'jwt expired') {
         return TOKEN_EXPIRED;

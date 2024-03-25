@@ -4,13 +4,13 @@ const response = require('../modules/response');
 const ResponseMessage = require('../modules/responseMessage')
 
 const authorization = async (req, res, next) => {
-  const authorization = req.headers.authorization
+  const authorization = req.headers.authorization;
   if (!authorization) {
-    return res.status(StatusCodes.UNAUTHORIZED).send(response.Error(ResponseMessage.EMPTY_TOKEN))
+    return res.status(StatusCodes.UNAUTHORIZED).send(response.Error(ResponseMessage.EMPTY_TOKEN));
   }
 
-  const token = authorization.split(' ')
-  const user = await jwt.verify({ token })
+  const token = authorization;
+  const user = await jwt.verify({ token });
 
   // 유효기간 만료
   if (user === jwt.TOKEN_EXPIRED)
@@ -27,17 +27,18 @@ const authorization = async (req, res, next) => {
 }
 
 /**
- * 
- * @param {Array} userTypes 
- * @returns 
+ *
+ * @param {Array} userTypes
+ * @returns
  */
 const checkUserType = (userTypes) => {
   const allowUserTypes = userTypes;
 
   return (req, res, next) => {
     const tokenInfo = req.jwt;
-    if (!allowUserTypes.includes(tokenInfo.payload.type)) {
-      return res.status(401).send({error:{}})
+    console.log(allowUserTypes, tokenInfo);
+    if (!allowUserTypes.includes(tokenInfo.type)) {
+      return res.status(401).send(response.Error('unauthorized'));
     }
 
     next();
