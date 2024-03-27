@@ -36,7 +36,6 @@ const checkUserType = (userTypes) => {
 
   return (req, res, next) => {
     const tokenInfo = req.jwt;
-    console.log(allowUserTypes, tokenInfo);
     if (!allowUserTypes.includes(tokenInfo.type)) {
       return res.status(401).send(response.Error('unauthorized'));
     }
